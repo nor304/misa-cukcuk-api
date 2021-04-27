@@ -19,11 +19,10 @@ namespace MISA.CukCuk.Api.Controllers
     [ApiController]
     public class CustomerController : ControllerBase
     {
+        //Inject interface ICustomerService và ICustomerRepository vào class CustomerController
         ICustomerService _customerService;
         ICustomerRepository _customerRepository;
-
-        public CustomerController(ICustomerService customerService, 
-            ICustomerRepository customerRepository)
+        public CustomerController(ICustomerService customerService, ICustomerRepository customerRepository)
         {
             _customerRepository = customerRepository;
             _customerService = customerService;
@@ -48,6 +47,11 @@ namespace MISA.CukCuk.Api.Controllers
             }
         }
 
+        // Lấy dữ liệu khách hàng với Id được truyền vào
+        // <returns>
+        // HttpStatusCode 200 - có dữ liệu trả về
+        // HttpStatusCode 204 - không có dữ liệu
+        // </returns>
         [HttpGet("{customerId}")]
         public IActionResult GetById(Guid customerId)
         {
@@ -114,7 +118,8 @@ namespace MISA.CukCuk.Api.Controllers
                 {
                     return NoContent();
                 }
-            }
-           
+        }
+
+        // TODO: Viết API sửa thông tin khách hàng, xóa khách hàng   
     }
 }
