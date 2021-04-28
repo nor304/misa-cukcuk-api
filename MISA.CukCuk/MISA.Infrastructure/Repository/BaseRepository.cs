@@ -25,9 +25,8 @@ namespace MISA.Infrastructure.Repository
         {
             using (dbConnection = new MySqlConnection(connectionString))
             {
-                //var customers = dbConnection.Query<Customer>("SELECT * FROM Customer WHERE 1=0");
-                var customerGroups = dbConnection.Query<MISAEntity>($"Proc_Get{tableName}s", commandType: CommandType.StoredProcedure);
-                return customerGroups;
+                var entities = dbConnection.Query<MISAEntity>($"Proc_Get{tableName}s", commandType: CommandType.StoredProcedure);
+                return entities;
             }
         }
 
@@ -38,9 +37,9 @@ namespace MISA.Infrastructure.Repository
             {
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add($"@{tableName}Id", entityId);
-                var customer = dbConnection.QueryFirstOrDefault<MISAEntity>($"Proc_Get{tableName}ById",
+                var entity = dbConnection.QueryFirstOrDefault<MISAEntity>($"Proc_Get{tableName}ById",
                     param: parameters, commandType: CommandType.StoredProcedure);
-                return customer;
+                return entity;
             }
         }
 
@@ -50,7 +49,7 @@ namespace MISA.Infrastructure.Repository
             using (dbConnection = new MySqlConnection(connectionString))
             {
                 var rowsAffect = dbConnection.Execute($"Proc_Insert{tableName}", param: entity,
-              commandType: CommandType.StoredProcedure);
+                commandType: CommandType.StoredProcedure);
                 return rowsAffect;
             }
         }

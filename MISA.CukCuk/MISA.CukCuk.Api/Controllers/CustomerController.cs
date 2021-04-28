@@ -1,17 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Data;
-using MySqlConnector;
-using Dapper;
-using System.Linq;
 using MISA.Core.Interfaces.Services;
 using MISA.Core.Interfaces.Repository;
 using MISA.Core.Entities;
-using MISA.Core.Service;
 
 namespace MISA.CukCuk.Api.Controllers
 {
@@ -69,10 +62,10 @@ namespace MISA.CukCuk.Api.Controllers
         // Thêm mới khách hàng
         // <param name="customer">Thông tin đối tượng khách hàng</param>
         // <returns>
-        // 201- thêm mới thành công
+        // 201 - thêm mới thành công
         // 204 - không thêm được vào db
         // 400 - dữ liệu đầu vào không hợp lệ
-        // 500 - có lối xả ra phóa server (exception,...)
+        // 500 - có lỗi xảy ra phía server (exception,...)
         // </returns>
         [HttpPost]
         public IActionResult Post(Customer customer)
@@ -87,39 +80,63 @@ namespace MISA.CukCuk.Api.Controllers
                 return NoContent();
             }
             // - Check mã có trùng hay không?
-               string connectionString = "" +
-                    "Host = 47.241.69.179;" +
-                    "Port = 3306;" +
-                    "Database = MF0_NVManh_CukCuk02;" +
-                    "User Id= dev;" +
-                    "Password = 12345678;";
-                IDbConnection dbConnection = new MySqlConnection(connectionString);
+            //    string connectionString = "" +
+            //         "Host = 47.241.69.179;" +
+            //         "Port = 3306;" +
+            //         "Database = MF0_NVManh_CukCuk02;" +
+            //         "User Id= dev;" +
+            //         "Password = 12345678;";
+            //     IDbConnection dbConnection = new MySqlConnection(connectionString);
 
-                DynamicParameters dynamicParameters = new DynamicParameters();
-                dynamicParameters.Add("@m_CustomerCode", customer.CustomerCode);
-                var customerCodeExists = dbConnection.QueryFirstOrDefault<bool>("Proc_CheckCustomerCodeExists", dynamicParameters, commandType: CommandType.StoredProcedure);
-                if (customerCodeExists == true)
-                {
-                    var response = new
-                    {
-                        devMsg = "Mã khách hàng đã tồn tại trong hệ thống!",
-                        MISACode = "002"
-                    };
-                    return BadRequest(response);
-                }
-
-                var rowsAffect = dbConnection.Execute("Proc_InsertCustomer", param: customer, commandType: CommandType.StoredProcedure);
-
-                if (rowsAffect > 0)
-                {
-                    return StatusCode(201, rowsAffect);
-                }
-                else
-                {
-                    return NoContent();
-                }
+                // DynamicParameters dynamicParameters = new DynamicParameters();
+                // dynamicParameters.Add("@m_CustomerCode", customer.CustomerCode);
+                // var customerCodeExists = dbConnection.QueryFirstOrDefault<bool>("Proc_CheckCustomerCodeExists", dynamicParameters, commandType: CommandType.StoredProcedure);
+                // if (customerCodeExists == true)
+                // {
+                //     var response = new
+                //     {
+                //         devMsg = "Mã khách hàng đã tồn tại trong hệ thống!",
+                //         MISACode = "002"
+                //     };
+                //     return BadRequest(response);
+                // }
+            //FIXME: is this necessery???
         }
 
-        // TODO: Viết API sửa thông tin khách hàng, xóa khách hàng   
+        // Sửa thông tin khách hàng 
+        // <param name="id">Id khách hàng</param>
+        // <param name="customer">Khách hàng</param>
+        // <returns>Khách hàng được sửa</returns>
+        [HttpPut("{customerId}")]
+        public IActionResult Put([FromBody] Customer customer)
+        {
+            // Số bản ghi được sửa đổi
+            var rowAffects = _customerService.Update(customer);
+            if (rowAffects > 0)
+            {
+                return Ok("Sửa thành công");
+            }
+            return NoContent();
+        }
+
+        // Xóa khách hàng 
+        // <param name="customerId">Id khách hàng</param>
+        // <returns>
+        // 200 - xóa thành công
+        // 204 - không xóa được dữ liệu khỏi DB 
+        // </returns>
+        [HttpDelete("{customerId}")]
+        public IActionResult Delete(Guid customerId)
+        {
+            var rowAffects = _customerService.Delete(customerId);
+            if (rowAffects > 0)
+            {
+                return Ok("Xóa thành công");
+            }
+            else
+            {
+                return NoContent();
+            }
+        }
     }
 }

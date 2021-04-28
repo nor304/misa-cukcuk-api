@@ -14,10 +14,15 @@ namespace MISA.Infrastructure.Repository
          public bool CheckCustomerCodeExist(string customerCode)
         {
             // Khởi tạo kết nối:
-
-            // Check dữ liệu:
-            // TODO: Validate dữ liệu
-            return true;
+            using (dbConnection = new MySqlConnection(connectionString))
+            {
+                // Check dữ liệu:
+                DynamicParameters dynamicParameters = new DynamicParameters();
+                dynamicParameters.Add("@m_CustomerCode", customerCode);
+                var result = dbConnection.QueryFirstOrDefault<bool>("Proc_CheckCustomerCodeExists",
+                    dynamicParameters, commandType: CommandType.StoredProcedure);
+                return result;
+            }
         }
 
         public bool CheckPhoneNumnerExits(string phoneNumber)

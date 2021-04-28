@@ -47,10 +47,10 @@ namespace MISA.CukCuk.Api.Controllers
         // HttpStatusCode 200 - có dữ liệu trả về
         // HttpStatusCode 204 - không có dữ liệu
         // </returns>
-        [HttpGet("{id}")]
-        public IActionResult Get(Guid id)
+        [HttpGet("{customerGroupId}")]
+        public IActionResult Get(Guid customerGroupId)
         {
-            var customerGroup = _customerGroupRepository.GetById(id);
+            var customerGroup = _customerGroupRepository.GetById(customerGroupId);
             if (customerGroup == null)
             {
                 return NoContent();
@@ -64,10 +64,10 @@ namespace MISA.CukCuk.Api.Controllers
         // Thêm mới nhóm khách hàng
         // <param name="customerGroup">Thông tin nhóm khách hàng</param>
         // <returns>
-        // 201- thêm mới thành công
+        // 201 - thêm mới thành công
         // 204 - không thêm được vào db
         // 400 - dữ liệu đầu vào không hợp lệ
-        // 500 - có lối xả ra phóa server (exception,...)
+        // 500 - có lỗi xảy ra phía server (exception,...)
         // </returns>
         [HttpPost]
         public IActionResult Post(CustomerGroup customerGroup)
@@ -76,6 +76,43 @@ namespace MISA.CukCuk.Api.Controllers
             if (res > 0)
             {
                 return StatusCode(201, res);
+            }
+            else
+            {
+                return NoContent();
+            }
+        }
+
+        // Sửa thông tin nhóm khách hàng 
+        // <param name="customerGroup">Đối tượng nhóm khách hàng</param>
+        // <returns>Nhóm khách hàng được sửa</returns>
+        [HttpPut("{customerGroupId}")]
+        public IActionResult Put([FromBody] CustomerGroup customerGroup) {
+            var rowAffects = _customerGroupService.Update(customerGroup);
+            // Số bản ghi được sửa đổi
+            if (rowAffects > 0)
+            {
+                return Ok("Sửa thành công"); 
+            }
+            else
+            {
+                return NoContent();
+            }
+        }
+
+        //Xóa nhóm khách hàng
+        //<param name="id">Id khách hàng</param>
+        // <returns>
+        // 200 - xóa thành công
+        // 204 - không xóa được dữ liệu khỏi DB 
+        // </returns>
+        [HttpDelete("{customerGroupId}")]
+        public IActionResult Delete(Guid customerGroupId)
+        {
+            var rowAffects = _customerGroupService.Delete(customerGroupId);
+            if (rowAffects > 0)
+            {
+                return Ok("Xóa thành công");
             }
             else
             {
