@@ -9,5 +9,6 @@ namespace MISA.Core.Interfaces.Repository
     {
         public bool CheckCustomerCodeExist(string customerCode);
         public bool CheckPhoneNumnerExits(string phoneNumber);
+        public bool CheckEmailExists(string email);
     }
 }

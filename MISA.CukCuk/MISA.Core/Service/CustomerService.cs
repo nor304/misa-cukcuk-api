@@ -25,18 +25,26 @@ namespace MISA.Core.Service
             {
                 // Xác định property nào thực hiện validate
                 var customer = entity as Customer;
-                // Tên khách hàng không được phép để trống
-                if (string.IsNullOrEmpty(customer.FullName))
-                {
-                    throw new Exception("Tên khách hàng không được phép để trống");
-                }
                 // Check các thông tin bắt buộc nhập:
                 CustomerException.CheckCustomerCodeEmpty(customer.CustomerCode);
-                // Check trùng mã:
-                var isExits = _customerRepository.CheckCustomerCodeExist(customer.CustomerCode);
-                if (isExits == true)
+                CustomerException.CheckFullNameEmpty(customer.FullName);
+                CustomerException.CheckPhoneNumberEmpty(customer.PhoneNumber);
+                CustomerException.CheckEmailEmpty(customer.Email);
+                // Check trùng thông tin:
+                // Trùng mã khách hàng
+                if (_customerRepository.CheckCustomerCodeExist(customer.CustomerCode) == true)
                 {
-                    throw new CustomerException("MÃ khách hàng đã tồn tại trên hệ thống!.");
+                    throw new CustomerException("Mã khách hàng đã tồn tại trên hệ thống!.");
+                }
+                // Trùng số điện thoại
+                if(_customerRepository.CheckPhoneNumnerExits(customer.PhoneNumber) == true)
+                {
+                    throw new CustomerException("Số điện thoại đã tồn tại trên hệ thống!.");
+                }
+                // Trùng Email
+                if(_customerRepository.CheckEmailExists(customer.Email) == true)
+                    {
+                    throw new CustomerException("Email đã tồn tại trên hệ thống!.");
                 }
             }
            

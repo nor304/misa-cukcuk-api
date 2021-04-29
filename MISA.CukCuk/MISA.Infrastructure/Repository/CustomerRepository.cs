@@ -11,12 +11,12 @@ namespace MISA.Infrastructure.Repository
 {
     public class CustomerRepository : BaseRepository<Customer>, ICustomerRepository
     {
+         // Kiểm tra mã nhân viên có trùng không
          public bool CheckCustomerCodeExist(string customerCode)
         {
             // Khởi tạo kết nối:
             using (dbConnection = new MySqlConnection(connectionString))
             {
-                // Check dữ liệu:
                 DynamicParameters dynamicParameters = new DynamicParameters();
                 dynamicParameters.Add("@m_CustomerCode", customerCode);
                 var result = dbConnection.QueryFirstOrDefault<bool>("Proc_CheckCustomerCodeExists",
@@ -25,9 +25,32 @@ namespace MISA.Infrastructure.Repository
             }
         }
 
+        // Kiểm tra số điện thoại có trùng không
         public bool CheckPhoneNumnerExits(string phoneNumber)
         {
-            throw new NotImplementedException();
+            // Khởi tạo kết nối:
+            using (dbConnection = new MySqlConnection(connectionString))
+            {
+                DynamicParameters dynamicParameters = new DynamicParameters();
+                dynamicParameters.Add("@m_PhoneNumber", phoneNumber);
+                var result = dbConnection.QueryFirstOrDefault<bool>("Proc_CheckPhoneNumberExists",
+                    dynamicParameters, commandType: CommandType.StoredProcedure);
+                return result;
+            }
+        }
+
+        // Kiểm tra email có trùng không
+        public bool CheckEmailExists(string email)
+        {
+            // Khởi tạo kết nối:
+            using (dbConnection = new MySqlConnection(connectionString))
+            {
+                DynamicParameters dynamicParameters = new DynamicParameters();
+                dynamicParameters.Add("@m_Email", email);
+                var result = dbConnection.QueryFirstOrDefault<bool>("Proc_CheckEmailExists",
+                    dynamicParameters, commandType: CommandType.StoredProcedure);
+                return result;
+            }
         }
     }
 }
