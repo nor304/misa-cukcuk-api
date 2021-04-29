@@ -3,6 +3,8 @@ using MISA.Core.Interfaces.Services;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using MISA.Core.Exceptions;
+using MISA.Core.AttributeCustom;
 
 namespace MISA.Core.Service
 {
@@ -36,11 +38,53 @@ namespace MISA.Core.Service
         }
 
         //Khởi tạo hàm virtual để các class con có thể overide
-        protected virtual void Validate(MISAEntity entity)
+        private void Validate(MISAEntity entity)
+        {
+            //Lấy ra tất cả property của class
+            var properties = typeof(MISAEntity).GetProperties();
+            foreach(var property in properties)
+            {
+                var requiredProperties = property.GetCustomAttributes(typeof(MISAEntity), true);
+                var maxLengthProperties = property.GetCustomAttributes(typeof(MISAEntity), true);
+                if(requiredProperties.Length > 0)
+                {
+                    // Lấy giá trị
+                    var propertyValue = property.GetValue(entity);
+                    //Kiểm tra giá trị
+                    if(string.IsNullOrEmpty(propertyValue.ToString()))
+                    {
+                        var msgError = (requiredProperties[0] as MISARequired).MsgError;
+                        if (string.IsNullOrEmpty(msgError))
+                        {
+                            msgError = $"Thông tin {property.Name} không được phép để trống!";
+                        }
+                        throw new CustomerException(msgError);
+                    }
+                }
+
+                // Check maxlength:
+                if (maxLengthProperties.Length > 0)
+                {
+                    // Lấy giá trị:
+                    var propertyValue = property.GetValue(entity);
+                    var maxLength = (maxLengthProperties[0] as MISAMaxLength).MaxLength;
+                    // Kiểm tra giá trị:
+                    if (propertyValue.ToString().Length > maxLength)
+                    {
+                        var msgError = (maxLengthProperties[0] as MISAMaxLength).MsgError;
+                        throw new CustomerException(msgError);
+                    }
+                }
+            }
+
+            CustomValidate(entity);
+        }
+
+        protected virtual void CustomValidate(MISAEntity entity)
         {
 
         }
-        
+
         //Thay đổi đối tượng
         public int Update(MISAEntity entity)
         {

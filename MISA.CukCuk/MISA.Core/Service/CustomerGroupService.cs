@@ -17,34 +17,13 @@ namespace MISA.Core.Service
         }
 
         //Overide hàm Validate cho đặc thù riêng của entity CustomerGroup
-        protected override void Validate(CustomerGroup entity)
+        protected override void CustomValidate(CustomerGroup entity)
         {
-            throw new Exception("Phan Bắc");
+            if(string.IsNullOrEmpty(entity.CustomerGroupName))
+            {
+                throw new Exception("Tên nhóm khách hàng không được phép để trống");
+            }
+            
         }
-        
-        //public int Delete(Guid custimerId)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //public IEnumerable<CustomerGroup> GetAll()
-        //{
-        //    return _customerGroupRepository.GetAll();
-        //}
-
-        //public CustomerGroup GetById(Guid customerGroupId)
-        //{
-        //    return _customerGroupRepository.GetById(customerGroupId);
-        //}
-
-        //public int Insert(CustomerGroup customer)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //public int Update(CustomerGroup customer)
-        //{
-        //    throw new NotImplementedException();
-        //}
     }
 }

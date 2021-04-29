@@ -49,7 +49,7 @@ namespace MISA.CukCuk.Api.Controllers
         public IActionResult GetById(Guid customerId)
         {
             var customer = _customerService.GetById(customerId);
-            if (customer==null)
+            if (customer == null)
             {
                 return NoContent();
             }
@@ -71,9 +71,9 @@ namespace MISA.CukCuk.Api.Controllers
         public IActionResult Post(Customer customer)
         {
             var res = _customerService.Insert(customer);
-            if (res>0)
+            if (res > 0)
             {
-                return StatusCode(201,res);
+                return StatusCode(201, res);
             }
             else
             {
@@ -88,18 +88,18 @@ namespace MISA.CukCuk.Api.Controllers
             //         "Password = 12345678;";
             //     IDbConnection dbConnection = new MySqlConnection(connectionString);
 
-                // DynamicParameters dynamicParameters = new DynamicParameters();
-                // dynamicParameters.Add("@m_CustomerCode", customer.CustomerCode);
-                // var customerCodeExists = dbConnection.QueryFirstOrDefault<bool>("Proc_CheckCustomerCodeExists", dynamicParameters, commandType: CommandType.StoredProcedure);
-                // if (customerCodeExists == true)
-                // {
-                //     var response = new
-                //     {
-                //         devMsg = "Mã khách hàng đã tồn tại trong hệ thống!",
-                //         MISACode = "002"
-                //     };
-                //     return BadRequest(response);
-                // }
+            // DynamicParameters dynamicParameters = new DynamicParameters();
+            // dynamicParameters.Add("@m_CustomerCode", customer.CustomerCode);
+            // var customerCodeExists = dbConnection.QueryFirstOrDefault<bool>("Proc_CheckCustomerCodeExists", dynamicParameters, commandType: CommandType.StoredProcedure);
+            // if (customerCodeExists == true)
+            // {
+            //     var response = new
+            //     {
+            //         devMsg = "Mã khách hàng đã tồn tại trong hệ thống!",
+            //         MISACode = "002"
+            //     };
+            //     return BadRequest(response);
+            // }
             //FIXME: is this necessery???
         }
 

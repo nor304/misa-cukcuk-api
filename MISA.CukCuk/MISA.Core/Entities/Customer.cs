@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MISA.Core.AttributeCustom;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -10,8 +11,11 @@ namespace MISA.Core.Entities
         //Khóa chính
         public Guid CustomerId { get; set; }
         //Mã khách hàng
+        [MISARequired("Mã khách hàng không được phép để trống")]
+        [MISAMaxLength(20, msgError: "Mã khách hàng không được dài quá 20 ký tự")]
         public string CustomerCode { get; set; }
         //Họ và tên
+        [MISARequired]
         public string FullName { get; set; }
         //Ngày sinh
         public DateTime DateOfBirth { get; set; }
