@@ -32,7 +32,7 @@ namespace MISA.CukCuk.Api.Middware
 
         private static Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
-            HttpStatusCode status;
+            //HttpStatusCode status;
             string message;
             var response = new
             {

@@ -8,13 +8,16 @@ using MISA.Core.AttributeCustom;
 
 namespace MISA.Core.Service
 {
-    public class BaseService<MISAEntity> : IBaseService<MISAEntity> where MISAEntity: class
+    public class BaseService<MISAEntity> : IBaseService<MISAEntity> where MISAEntity : class
     {
         //Inject interface IBaseRepository vào class BaseService
         IBaseRepository<MISAEntity> _baseRepository;
+
+        protected List<Object> listValidate;
         public BaseService(IBaseRepository<MISAEntity> baseRepository)
         {
             _baseRepository = baseRepository;
+            listValidate = new List<Object>();
         }
 
         //Lấy toàn bộ dữ liệu của đối tượng
@@ -53,12 +56,7 @@ namespace MISA.Core.Service
                     //Kiểm tra giá trị
                     if(string.IsNullOrEmpty(propertyValue.ToString()))
                     {
-                        var msgError = (requiredProperties[0] as MISARequired).MsgError;
-                        if (string.IsNullOrEmpty(msgError))
-                        {
-                            msgError = $"Thông tin {property.Name} không được phép để trống!";
-                        }
-                        throw new CustomerException(msgError);
+                        listValidate.Add(new { devMsg = (requiredProperties[0] as MISARequiredNull).MsgError });
                     }
                 }
 

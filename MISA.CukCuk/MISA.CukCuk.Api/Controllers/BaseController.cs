@@ -8,15 +8,13 @@ using System.Threading.Tasks;
 
 namespace MISA.CukCuk.Api.Controllers
 {
-    public class BaseController<MISAEntity> : Controller where MISAEntity:class
+    public class BaseController<MISAEntity> : Controller where MISAEntity : class
     {
         //Inject interface BaseService và BaseRepository vào class BaseController
         IBaseService<MISAEntity> _baseService;
-        IBaseRepository<MISAEntity> _baseRepository; 
-        public BaseController(IBaseService<MISAEntity> baseService, IBaseRepository<MISAEntity> baseRepository)
+        public BaseController(IBaseService<MISAEntity> baseService)
         {
             _baseService = baseService;
-            _baseRepository = baseRepository;
         }
 
         //Lấy toàn bộ dữ liệu về đối tượng
@@ -27,7 +25,7 @@ namespace MISA.CukCuk.Api.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            var entities = _baseRepository.GetAll();
+            var entities = _baseService.GetAll();
                 if (entities.Count() > 0)
                 {
                     return Ok(entities);

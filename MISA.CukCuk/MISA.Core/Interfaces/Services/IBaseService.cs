@@ -5,7 +5,7 @@ using System.Text;
 namespace MISA.Core.Interfaces.Services
 {
     //Service chung phục vụ cho mọi đối tượng (Object)
-    public interface IBaseService<MISAEntity>
+    public interface IBaseService<MISAEntity> where MISAEntity : class
     {
         //Lấy toàn bộ dữ liệu của đối tượng
         public IEnumerable<MISAEntity> GetAll();

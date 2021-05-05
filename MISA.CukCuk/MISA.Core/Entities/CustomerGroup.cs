@@ -11,7 +11,7 @@ namespace MISA.Core.Entities
         //Khóa chính
         public Guid CustomerGroupId { get; set; }
         //Tên nhóm khách hàng
-        [MISARequired("Tên nhóm khách hàng không được phép để trống")]
+        [MISARequiredBase("Tên nhóm khách hàng không được phép để trống")]
         public string CustomerGroupName { get; set; }
         //Mô tả
         public string Description { get; set; }

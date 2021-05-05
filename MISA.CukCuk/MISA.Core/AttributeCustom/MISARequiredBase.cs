@@ -5,17 +5,17 @@ using System.Text;
 namespace MISA.Core.AttributeCustom
 {
     [AttributeUsage(AttributeTargets.Property)]
-    public class MISARequired:Attribute
+    public class MISARequiredBase : Attribute
     {
         public string MsgError = string.Empty;
-        public MISARequired(string msgError = "")
+        public MISARequiredBase(string msgError = "")
         {
             MsgError = msgError;
         }
     }
 
     [AttributeUsage(AttributeTargets.Property)]
-    public class MISAMaxLength:Attribute
+    public class MISAMaxLength : Attribute
     {
         public int MaxLength = 0;
         public string MsgError = string.Empty;

@@ -11,11 +11,12 @@ namespace MISA.Core.Entities
         //Khóa chính
         public Guid CustomerId { get; set; }
         //Mã khách hàng
-        [MISARequired("Mã khách hàng không được phép để trống")]
+        [MISARequiredNull("Mã khách hàng không được phép để trống")]
+        [MISARequiredExsist("Mã khách hàng đã tồn tại trong hệ thống")]
         [MISAMaxLength(20, msgError: "Mã khách hàng không được dài quá 20 ký tự")]
         public string CustomerCode { get; set; }
         //Họ và tên
-        //[MISARequired("Tên khách hàng không được phép để trống")]
+        [MISARequiredNull("Tên khách hàng không được phép để trống")]
         public string FullName { get; set; }
         //Ngày sinh
         public DateTime DateOfBirth { get; set; }
@@ -26,10 +27,12 @@ namespace MISA.Core.Entities
         //ID nhóm khách hàng
         public Guid? CustomerGroupId { get; set; }
         //Số điện thoại
-        //[MISARequired("Số điện thoại không được phép để trống")]
+        [MISARequiredNull("Số điện thoại không được phép để trống")]
+        [MISARequiredExsist("Số điện thoại đã tồn tại trong hệ thống")]
         public string PhoneNumber { get; set; }
         //Email
-        //[MISARequired("Email không được phép để trống")]
+        [MISARequiredNull("Email không được phép để trống")]
+        [MISARequiredExsist("Email đã tồn tại trong hệ thống")]
         public string Email { get; set; }
         //Tên công ty
         public string CompanyName { get; set; }

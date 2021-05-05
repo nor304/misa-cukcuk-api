@@ -78,5 +78,16 @@ namespace MISA.Infrastructure.Repository
             }
         }
 
+        public bool CheckAttributeExsists(string attributeName, string propertyValue)
+        {
+            using (dbConnection = new MySqlConnection(connectionString))
+            {
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@tableName", ${tableName});
+                parameters.Add("@attributeName", attributeName);
+            }
+                return true;
+        }
+
     }
 }
